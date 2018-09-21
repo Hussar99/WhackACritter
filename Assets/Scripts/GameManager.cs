@@ -5,9 +5,10 @@ using UnityEngine;
 public class GameManager : MonoBehaviour {
 
     public List<GameObject> critterPrefabs;
-
     public float critterSpawnFrequency = 1.0f;
     public Score scoreDisplay;
+    public Timer timer;
+    public SpriteRenderer button;
 
     private float lastCritterSpawn = 0;
 
@@ -20,8 +21,8 @@ public class GameManager : MonoBehaviour {
 	void Update () {
 
         // Check if it is time to spawn the next critter.
-        float nextSpawnedTime = lastCritterSpawn + critterSpawnFrequency;
-		if (Time.time >= nextSpawnedTime)
+        float nextSpawnTime = lastCritterSpawn + critterSpawnFrequency;
+		if (Time.time >= nextSpawnTime  && timer.IsTimerRunning() == true)
         {
             //It is time!
 
@@ -35,11 +36,39 @@ public class GameManager : MonoBehaviour {
             //Get access to our critter script.
             Critter critterScript = spawnedCritter.GetComponent<Critter>();
 
-            // tell the critter script the score object
+            // tell the critter script the score object and the timer object
             critterScript.scoreDisplay = scoreDisplay;
+            critterScript.timer = timer;
 
             // Update the most recent spawn time to now.
             lastCritterSpawn = Time.time;
         }
+
+        // Update button visability
+        if (timer.IsTimerRunning() == true)
+        {
+            button.enabled = false;
+        }
+        else // if game is NOT running
+        {
+            button.enabled = true;
+        }
+
 	}
+
+
+    // Did they click the button?
+    private void OnMouseDown()
+    {
+        
+    
+
+        // Only respawn if the game is not running.
+    if (timer.IsTimerRunning() == false)
+        {
+            // STart new game
+            timer.StartTimer();
+            scoreDisplay.ResetScore();
+        }
+    }
 }

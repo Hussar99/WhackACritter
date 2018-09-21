@@ -16,7 +16,7 @@ public class Timer : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        StartTimer();
+        //StartTimer();
 	}
 	
 	// Update is called once per frame
